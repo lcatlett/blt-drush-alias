@@ -1,0 +1,22 @@
+{
+  "name": "lcatlett/blt-drush-alias",
+    "type": "library",
+    "description": "Acquia Drush Alias Generator Plugin for Acquia BLT",
+    "keywords": ["acquia", "blt","drush"],
+    "homepage": "https://github.com/lcatlett/blt-drush-alias",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lindsey Catlett",
+            "role": "Maintainer"
+        }
+    ],
+  "require": {
+    "typhonius/acquia-php-sdk-v2": "^1.0.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lcatlett\\BltDrushAlias\\": "./src/"
+    }
+  }
+}
