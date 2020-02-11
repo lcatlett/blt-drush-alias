@@ -368,7 +368,7 @@ class DrushAliasCommand extends BltTasks {
     }
     $filePath = $this->siteAliasDir . '/' . $site_id . '.site.yml';
     if (file_exists($filePath)) {
-      if (!$this->confirm("File $filePath already exists and will be overwritten. Continue?")) {
+      if (!$this->confirm("File $filePath already exists and will be overwritten. Continue?" , TRUE)) {
         throw new \Exception("Aborted at user request");
       }
     }
