@@ -7,6 +7,9 @@ use Acquia\Blt\Robo\Exceptions\BltException;
 use Acquia\Hmac\Exception\MalformedResponseException as MalformedResponseExceptionAlias;
 use AcquiaCloudApi\CloudApi\Client;
 use AcquiaCloudApi\CloudApi\Connector;
+use AcquiaCloudApi\Endpoints\Account;
+use AcquiaCloudApi\Endpoints\Applications;
+use AcquiaCloudApi\Endpoints\Environments;
 use Symfony\Component\Yaml\Yaml;
 use Acquia\Blt\Robo\Common\YamlMunge;
 
@@ -67,7 +70,8 @@ class DrushAliasCommand extends BltTasks {
     $cloudApiConfig = $this->loadCloudApiConfig();
     $this->setCloudApiClient($cloudApiConfig['key'], $cloudApiConfig['secret']);
     $this->say("<info>Gathering site info from Acquia Cloud.</info>");
-    $site = $this->cloudApiClient->application($this->appId);
+    $applicationAdapter = new Applications($this->cloudApiClient);
+    $site = $applicationAdapter->get($this->appId);
     $error = FALSE;
     try {
       $this->getSiteAliases($site);
@@ -192,7 +196,8 @@ class DrushAliasCommand extends BltTasks {
       ]);
       $cloud_api = Client::factory($connector);
       // We must call some method on the client to test authentication.
-      $cloud_api->account();
+      $account = new Account();
+      $account->get();
       $this->cloudApiClient = $cloud_api;
     }
     catch (MalformedResponseExceptionAlias $e) {
@@ -229,7 +234,8 @@ class DrushAliasCommand extends BltTasks {
     $aliases = [];
     $sites = [];
     $this->output->writeln("<info>Gathering sites list from Acquia Cloud.</info>");
-    $environments = $this->cloudApiClient->environments($site->uuid);
+    $environmentAdapter = new Environments($this->cloudApiClient);
+    $environments = $environmentAdapter->getAll($site->uuid);
     $hosting = $site->hosting->type;
     $site_split = explode(':', $site->hosting->id);
     foreach ($environments as $env) {
