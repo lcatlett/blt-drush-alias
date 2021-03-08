@@ -5,8 +5,8 @@ namespace Lcatlett\BltDrushAlias\Blt\Plugin\Commands;
 use Acquia\Blt\Robo\BltTasks;
 use Acquia\Blt\Robo\Exceptions\BltException;
 use Acquia\Hmac\Exception\MalformedResponseException as MalformedResponseExceptionAlias;
-use AcquiaCloudApi\CloudApi\Client;
-use AcquiaCloudApi\CloudApi\Connector;
+use AcquiaCloudApi\Connector\Client;
+use AcquiaCloudApi\Connector\Connector;
 use AcquiaCloudApi\Endpoints\Account;
 use AcquiaCloudApi\Endpoints\Applications;
 use AcquiaCloudApi\Endpoints\Environments;
@@ -21,7 +21,7 @@ class DrushAliasCommand extends BltTasks {
   /**
    * Cloud API client.
    *
-   * @var \AcquiaCloudApi\CloudApi\Client
+   * @var \AcquiaCloudApi\Connector\Client
    */
   protected $cloudApiClient;
   /**
@@ -196,7 +196,7 @@ class DrushAliasCommand extends BltTasks {
       ]);
       $cloud_api = Client::factory($connector);
       // We must call some method on the client to test authentication.
-      $account = new Account();
+      $account = new Account($cloud_api);
       $account->get();
       $this->cloudApiClient = $cloud_api;
     }
@@ -215,7 +215,7 @@ class DrushAliasCommand extends BltTasks {
   /**
    * Gets connection with API client.
    *
-   * @return \AcquiaCloudApi\CloudApi\Client
+   * @return \AcquiaCloudApi\Connector\Client
    *   The API Client connection.
    */
   protected function getCloudApiClient() {
